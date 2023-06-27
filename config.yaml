@@ -1,0 +1,23 @@
+env:
+  - name: "SERVER_PORT"
+    value: ":8080"
+  - name: "MEMORY_MODE"
+    value: "inmemory"
+  - name: "TRANSPORT_MODE"  
+    value: "http"
+
+  - name: "DB_NAME"
+    value: "postgres"
+  - name: "DB_HOST"
+    value: "host.docker.internal"
+  - name: "DB_PORT"
+    value: "5432"
+  - name: "DB_USER"
+    value: "postgres"
+
+  - name: "LOG_LEVEL"
+    value: "debug"
+
+  - name: "SHORT_URL_PATTERN"
+    value: "^[a-zA-Z0-9_]{10}$"
+

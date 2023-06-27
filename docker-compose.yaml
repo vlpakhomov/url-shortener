@@ -1,0 +1,28 @@
+version: '3.1'
+
+services: 
+  postgres:
+    image: postgres:latest
+    container_name: db
+    environment:
+      DB_NAME: "postgres"
+      DB_HOST: "localhost"
+      POSTGRES_PASSWORD: "${pg_pass}"
+      USER_NAME: "postgres"
+
+    ports:
+      - "5432:5432"
+
+  url_shortener:
+    build:
+      context: ./
+      dockerfile: ./build/Dockerfile
+    container_name: url_shortener
+    environment:
+      pg_pass: "${pg_pass}"
+    restart: always
+    ports:
+      - '9000:9000'
+      - '8080:8080'
+      - '7080:7000'
+      - '7081:7001'
