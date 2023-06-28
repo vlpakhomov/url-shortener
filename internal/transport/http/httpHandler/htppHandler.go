@@ -67,7 +67,7 @@ func (hl *HttpHandler) ShortenUrl(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method == http.MethodPost {
 
-		if r.Header.Get("Content-Type") != "text/plain; charset=utf-8 | transportMode=http" {
+		if r.Header.Get("Content-Type") != "text/plain; charset=utf-8" {
 			hl.clientError(w)
 			return
 		}

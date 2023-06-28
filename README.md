@@ -160,7 +160,8 @@ If you want access the service with transport_mode=gRPC,  use evans utility:
 
 - gRPC + evans ✅
 - Makefile ✅
-- Unit and E2E test 
+- Unit test for business logic layer ✅
+- Testing transport and service by gomock
 - Сleaning of unused Url
 - .....
 

@@ -7,6 +7,7 @@ services:
     environment:
       DB_NAME: "postgres"
       DB_HOST: "localhost"
+      POSTGRES_PASSWORD: "${pg_pass}"
       USER_NAME: "postgres"
 
     ports:
