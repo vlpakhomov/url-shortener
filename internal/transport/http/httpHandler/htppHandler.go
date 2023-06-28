@@ -21,22 +21,22 @@ type service interface {
 	ShortenUrl(ctx context.Context, url string) (string, error)
 }
 
-type Handler struct {
+type HttpHandler struct {
 	serv service
 }
 
-func (hl *Handler) getUrl(w http.ResponseWriter, r *http.Request) {
+func (hl *HttpHandler) GetUrl(w http.ResponseWriter, r *http.Request) {
 	ctx, cancel := context.WithTimeout(r.Context(), time.Second*10)
 	defer cancel()
 
-	logger.Debugf(ctx, "%s %s %s", r.RemoteAddr, r.Method, r.URL)
+	logger.Debugf(ctx, "%s %s %s | transportMode=http", r.RemoteAddr, r.Method, r.URL)
 
 	if r.Method == http.MethodGet {
 
 		rawShortUrl := r.URL.Query().Get("url")
 		if !validator.IsShortUrl(ctx, string(config.Get(config.ShortUrlPattern)), rawShortUrl) {
 
-			logger.Debugf(ctx, "bad request: invalid shortUrl %s", rawShortUrl)
+			logger.Debugf(ctx, "bad request: invalid shortUrl %s | transportMode=http", rawShortUrl)
 
 			hl.clientError(w)
 			return
@@ -45,13 +45,13 @@ func (hl *Handler) getUrl(w http.ResponseWriter, r *http.Request) {
 		rawUrl, err := hl.serv.GetUrl(ctx, rawShortUrl)
 		if err != nil {
 
-			logger.Errorf(ctx, "bad response: %v", err)
+			logger.Errorf(ctx, "bad response: %v | transportMode=http", err)
 
 			hl.serverError(w)
 			return
 		}
 
-		logger.Infof(ctx, "responded %s %s %s\n", r.RemoteAddr, r.Method, r.URL)
+		logger.Infof(ctx, "responded %s %s %s\n | transportMode=http", r.RemoteAddr, r.Method, r.URL)
 
 		w.Write([]byte(rawUrl))
 		return
@@ -59,15 +59,15 @@ func (hl *Handler) getUrl(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (hl *Handler) shortenUrl(w http.ResponseWriter, r *http.Request) {
+func (hl *HttpHandler) ShortenUrl(w http.ResponseWriter, r *http.Request) {
 	ctx, cancel := context.WithTimeout(r.Context(), time.Second*10)
 	defer cancel()
 
-	logger.Debugf(ctx, "%s %s %s", r.RemoteAddr, r.Method, r.URL)
+	logger.Debugf(ctx, "%s %s %s | transportMode=http", r.RemoteAddr, r.Method, r.URL)
 
 	if r.Method == http.MethodPost {
 
-		if r.Header.Get("Content-Type") != "text/plain; charset=utf-8" {
+		if r.Header.Get("Content-Type") != "text/plain; charset=utf-8 | transportMode=http" {
 			hl.clientError(w)
 			return
 		}
@@ -80,7 +80,7 @@ func (hl *Handler) shortenUrl(w http.ResponseWriter, r *http.Request) {
 		rawUrl := string(body)
 		if !validator.IsUrl(ctx, rawUrl) {
 
-			logger.Debugf(ctx, "bad request: invalid url %s", rawUrl)
+			logger.Debugf(ctx, "bad request: invalid url %s | transportMode=http", rawUrl)
 
 			hl.clientError(w)
 			return
@@ -89,38 +89,38 @@ func (hl *Handler) shortenUrl(w http.ResponseWriter, r *http.Request) {
 		rawShortUrl, err := hl.serv.ShortenUrl(ctx, rawUrl)
 		if err != nil {
 
-			logger.Errorf(ctx, "bad response: internal server error %v", err)
+			logger.Errorf(ctx, "bad response: internal server error %v | transportMode=http", err)
 
 			hl.serverError(w)
 			return
 
 		}
 
-		logger.Infof(ctx, "successfully completed %s %s %s\n", r.RemoteAddr, r.Method, r.URL)
+		logger.Infof(ctx, "successfully completed %s %s %s\n | transportMode=http", r.RemoteAddr, r.Method, r.URL)
 
 		w.Write([]byte(rawShortUrl))
 		return
 	}
 }
 
-func (hl *Handler) Router() *http.ServeMux {
+func (hl *HttpHandler) Router() *http.ServeMux {
 	mux := http.NewServeMux()
-	mux.HandleFunc(EndpointGetUrlPath, hl.getUrl)
-	mux.HandleFunc(EndpointShortenUrlPath, hl.shortenUrl)
+	mux.HandleFunc(EndpointGetUrlPath, hl.GetUrl)
+	mux.HandleFunc(EndpointShortenUrlPath, hl.ShortenUrl)
 	return mux
 }
 
-func (hl *Handler) serverError(w http.ResponseWriter) {
+func (hl *HttpHandler) serverError(w http.ResponseWriter) {
 	http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 }
 
-func (hl *Handler) clientError(w http.ResponseWriter) {
+func (hl *HttpHandler) clientError(w http.ResponseWriter) {
 	http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 }
 
-func NewHandler(s service) *Handler {
+func NewHandler(s service) *HttpHandler {
 
-	return &Handler{
+	return &HttpHandler{
 		serv: s,
 	}
 }

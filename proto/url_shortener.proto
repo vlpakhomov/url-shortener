@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package url_shortener;
+
+option go_package = "./";
+
+
+service GrpcHandler {
+
+  rpc GetUrl(GetUrlRequest) returns (GetUrlResponse) {}
+
+  rpc ShortenUrl(ShortenUrlRequest) returns (ShortenUrlResponse) {}
+
+}
+
+message GetUrlRequest {
+    string rawShortUrl = 1;
+}
+
+message GetUrlResponse {
+    string rawUrl = 1;
+}
+
+message ShortenUrlRequest {
+    string rawUrl = 1;
+}
+
+message ShortenUrlResponse {
+    string rawShortUrl = 1; 
+}

@@ -6,15 +6,15 @@ import (
 	"time"
 
 	"github.com/VlPakhomov/url_shortener/internal/config"
-	httpHandler "github.com/VlPakhomov/url_shortener/internal/transport/http/httpHandler"
+	"github.com/VlPakhomov/url_shortener/internal/transport/http/httpHandler"
 	"github.com/VlPakhomov/url_shortener/pkg/logger"
 )
 
-type Server struct {
+type HttpServer struct {
 	server *http.Server
 }
 
-func (srv *Server) Run(ctx context.Context) error {
+func (srv *HttpServer) Run(ctx context.Context) error {
 	go func() {
 		if err := srv.server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			logger.Fatalf(ctx, "failed to listen: %v", err)
@@ -37,11 +37,9 @@ func (srv *Server) Run(ctx context.Context) error {
 
 }
 
-func NewServer(ctx context.Context, hl *httpHandler.Handler, timeout time.Duration) *Server {
+func NewServer(ctx context.Context, hl *httpHandler.HttpHandler, timeout time.Duration) *HttpServer {
 
-	logger.Infof(ctx, "create server on port %s", string(config.Get(config.ServerPort)))
-
-	return &Server{
+	return &HttpServer{
 		server: &http.Server{
 			Addr:         string(config.Get(config.ServerPort)),
 			ReadTimeout:  timeout,

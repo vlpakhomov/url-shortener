@@ -22,11 +22,11 @@ This project is dedicated to implementation url-shortener service. It's task for
 <p align="right"><a href="#url_shortener">Back to top ⬆️</a></p>
 
 
-## 🗂️ Table of Contents (Optional)
+## 🗂️ Table of Contents 
 - [url\_shortener](#url_shortener)
 - [🏷️ Description](#️-description)
 - [🎯 Solutions and Techniques](#-solutions-and-techniques)
-- [🗂️ Table of Contents (Optional)](#️-table-of-contents-optional)
+- [🗂️ Table of Contents](#️-table-of-contents)
 - [🌿 Working Tree](#-working-tree)
 - [🛠️  Getting Started](#️--getting-started)
 - [⛮ API](#-api)
@@ -131,7 +131,7 @@ We can access the service using curl utility:
 
 ## 📌 To do 
 
-- gRPC
+- gRPC ✅
 - Makefile
 - Unit and E2E test 
 - Сleaning of unused Url
