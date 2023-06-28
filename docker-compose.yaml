@@ -7,7 +7,6 @@ services:
     environment:
       DB_NAME: "postgres"
       DB_HOST: "localhost"
-      POSTGRES_PASSWORD: "${pg_pass}"
       USER_NAME: "postgres"
 
     ports:
@@ -20,6 +19,8 @@ services:
     container_name: url_shortener
     environment:
       pg_pass: "${pg_pass}"
+      memory_mode: "${memory_mode}"
+      transport_mode: "${transport_mode}"
     restart: always
     ports:
       - '9000:9000'

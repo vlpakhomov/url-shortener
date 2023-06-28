@@ -2,6 +2,9 @@ FROM golang:latest as builder
 
 WORKDIR /app
 
+ARG memory_mode
+ENV memory_mode=$memory_mode
+
 RUN export GO111MODULE=on
 
 COPY ./go.mod ./

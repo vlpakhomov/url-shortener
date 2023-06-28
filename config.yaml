@@ -1,10 +1,6 @@
 env:
   - name: "SERVER_PORT"
     value: ":8080"
-  - name: "MEMORY_MODE"
-    value: "postgres"
-  - name: "TRANSPORT_MODE"  
-    value: "http"
 
   - name: "DB_NAME"
     value: "postgres"

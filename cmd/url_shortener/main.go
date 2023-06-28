@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
@@ -19,6 +20,8 @@ import (
 )
 
 const (
+	envMemoryMode      = "memory_mode"
+	envTransportMode   = "transport_mode"
 	postgresMemoryMode = "postgres"
 	inMemoryMemoryMode = "inmemory"
 	gRPCTransportMode  = "gRPC"
@@ -34,8 +37,9 @@ func main() {
 	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 	defer stop()
 
+	fmt.Println(os.Getenv(envTransportMode))
 	var strg service.Storage
-	if config.Get(config.MemoryMode) == postgresMemoryMode {
+	if os.Getenv(envMemoryMode) == postgresMemoryMode {
 		db, err := postgres.NewStorage(ctx, string(config.Get(config.DbHost)), os.Getenv("pg_pass"), string(config.Get(config.DbName)), string(config.Get(config.DbUser)), string(config.Get(config.DbPort)))
 
 		if err != nil {
@@ -61,21 +65,23 @@ func main() {
 
 	var srv server
 
-	if config.Get(config.TransportMode) == gRPCTransportMode {
+	if os.Getenv(envTransportMode) == httpTransportMode {
 		httpHl := httpHandler.NewHandler(serv)
 
 		logger.Infof(ctx, "create endpoint: %s  endpoint: %s", httpHandler.EndpointGetUrlPath, httpHandler.EndpointShortenUrlPath)
 
 		srv = httpServer.NewServer(ctx, httpHl, 1*time.Minute)
 
+		logger.Infof(ctx, "create server on http://locallhost.com:%s | transportMode=http", string(config.Get(config.ServerPort)))
+
 	} else {
 
 		gRPCHl := gRPCHandler.NewHandler(serv)
 		//logger.Infof(ctx, "create endpoint: %s  endpoint: %s", httpHandler.EndpointGetUrlPath, httpHandler.EndpointShortenUrlPath)
 		srv = gRPCServer.NewServer(ctx, gRPCHl)
-	}
 
-	logger.Infof(ctx, "create server on http://locallhost.com:%s", string(config.Get(config.ServerPort)))
+		logger.Infof(ctx, "create server on http://locallhost.com:%s | transportMode=gRPC", string(config.Get(config.ServerPort)))
+	}
 
 	if err := srv.Run(ctx); err != nil {
 		logger.Fatal(ctx, err)

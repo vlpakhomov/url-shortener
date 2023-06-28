@@ -1,19 +1,29 @@
-.PHONY: compose
-compose:
-	pg_pass=qwerty docker-compose up
-
 .PHONY: build
 build:
-	docker-compose build
+	docker compose build
 
-.PHONY: build_memory
-build_memory:
-	docker build -t ozon .
+.PHONY: build_inmemory_http
+build_inmemory_http:
+	memory_mode=inmemory transport_mode=http pg_pass=qwerty docker compose up --build
 
-.PHONY: run_memory
-run_memory:
-	docker run -p 8080:8080 -p 9000:9000 ozon -m
+.PHONY: build_postgres_http
+build_postgres_http:
+	memory_mode=postgres transport_mode=http pg_pass=qwerty docker compose up --build
 
-.PHONY: test
-test:
-	go test -cover ./...
+.PHONY: build_postgres_gRPC
+build_postgres_gRPC:
+	memory_mode=postgres transport_mode=gRPC pg_pass=qwerty docker compose up --build
+
+.PHONY: build_inmemory_gRPC
+build_inmemory_gRPC:
+	memory_mode=inmemory transport_mode=http pg_pass=qwerty docker compose up --build
+
+.PHONY: cold_compose_up 
+cold_run:
+	docker system prune && pg_pass=qwerty docker compose up --build
+
+.PHONY: compose_up
+compose_up:
+	pg_pass=qwerty docker compose up
+
+
