@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS links (
 	url		    VARCHAR(1024)
 );
 
-CREATE INDEX IF NOT EXISTS idx ON links(
+CREATE INDEX IF NOT EXISTS idx ON links USING hash(
 	url
 );
 `

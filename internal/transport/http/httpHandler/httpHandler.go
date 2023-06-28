@@ -51,7 +51,7 @@ func (hl *HttpHandler) GetUrl(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		logger.Infof(ctx, "responded %s %s %s\n | transportMode=http", r.RemoteAddr, r.Method, r.URL)
+		logger.Infof(ctx, "responded %s %s %s | transportMode=http", r.RemoteAddr, r.Method, r.URL)
 
 		w.Write([]byte(rawUrl))
 		return
@@ -96,7 +96,7 @@ func (hl *HttpHandler) ShortenUrl(w http.ResponseWriter, r *http.Request) {
 
 		}
 
-		logger.Infof(ctx, "successfully completed %s %s %s\n | transportMode=http", r.RemoteAddr, r.Method, r.URL)
+		logger.Infof(ctx, "responded %s %s %s | transportMode=http", r.RemoteAddr, r.Method, r.URL)
 
 		w.Write([]byte(rawShortUrl))
 		return

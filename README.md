@@ -6,7 +6,7 @@
 
 All my projects is bricks 🧱 of road to becoming a developer ✨.
 
-This project is dedicated to implementation url-shortener service. It's task for internship selection. We can see task-requirements is contains in TASK.md ⌛.
+This project is dedicated to implementation url-shortener service. It's task for internship selection of ozon. We can see task-requirements is contains in TASK.md.
 
 <p align="right"><a href="#url_shortener">Back to top ⬆️</a></p>
 
@@ -131,6 +131,7 @@ Application have two endpoints:
 - `GET /api/get-url/`
   - Handler use to get original url 
   - Url passed by query string (example: api/get-url/?url=xaw1234gre)
+  - Response is plain text with original url 
 
 ## 🧩 Usage
 
