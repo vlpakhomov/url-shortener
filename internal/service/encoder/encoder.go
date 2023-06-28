@@ -27,14 +27,3 @@ func Encode(token int) string {
 	}
 	return string(shorten[:])
 }
-
-/*
-func decode(shortUrl string) (token int) {
-	weight := 1
-	for i := 0; i < urlLen; i++ {
-		token += weight * decoder[shortUrl[urlLen-1-i]]
-		weight *= alphabetLen
-	}
-	return
-
-}*/

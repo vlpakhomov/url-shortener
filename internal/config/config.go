@@ -45,7 +45,7 @@ func init() {
 }
 
 func parseConfig() {
-	conf, err := os.OpenFile("../../config.yaml", os.O_RDONLY, os.ModeTemporary)
+	conf, err := os.OpenFile("./config.yaml", os.O_RDONLY, os.ModeTemporary)
 
 	if err != nil {
 		panic(fmt.Sprintf("failed to open config file: %+v", err))
