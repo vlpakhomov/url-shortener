@@ -8,6 +8,7 @@ import (
 	"github.com/VlPakhomov/url_shortener/pkg/logger"
 )
 
+//go:generate mockery --name Storage
 type Storage interface {
 	GetUrl(ctx context.Context, rawShortUrl string) (string, error)
 	GetShortUrl(ctx context.Context, rawUrl string) (string, error)
