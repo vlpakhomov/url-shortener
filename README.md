@@ -16,23 +16,25 @@ This project is dedicated to implementation url-shortener service. It's task for
 - in-memory solutin using map + RWMutex 
 - Auto application configuration using config parser
 - Multi-level logging using zap logger
-- Flexibility deploy with Docker 
+- Flexibility deploy with docker  
 - Work with PostgreSQL usin pgx and squirrel libraries
+- Unit-testing for business logic layer with testify;
+- Testing gRPC server with evans tool 
+- Simple run with makefile
 
 <p align="right"><a href="#url_shortener">Back to top ⬆️</a></p>
 
 
 ## 🗂️ Table of Contents 
-- [url\_shortener](#url_shortener)
-- [🏷️ Description](#️-description)
-- [🎯 Solutions and Techniques](#-solutions-and-techniques)
-- [🗂️ Table of Contents](#️-table-of-contents)
-- [🌿 Working Tree](#-working-tree)
-- [🛠️  Getting Started](#️--getting-started)
-- [⛮ API](#-api)
-- [🧩 Usage](#-usage)
-- [📌 To do](#-to-do)
-- [📫 Contact](#-contact)
+- [Description](#️-description)
+- [Solutions and Techniques](#-solutions-and-techniques)
+- [Table of Contents](#️-table-of-contents)
+- [Working Tree](#-working-tree)
+- [Getting Started](#️--getting-started)
+- [API](#-api)
+- [Usage](#-usage)
+- [To do](#-to-do)
+- [Contact](#-contact)
 
 ## 🌿 Working Tree
 ```
@@ -85,21 +87,24 @@ url_shortener
 
 ```bash
 git clone https://github.com/VlPakhomov/url_shortener
+```   
+
+2. You can build and run containers with default settings and with the database using the following commands:
+```
+# create and compose up with default settings
+ make run_default
 ```
 
-2. Set configuration in config.yaml(MEMORY_MODE, TRANSPORT_MODE and etc)
-   
+3. You can choose memory_mode and transport_mode using another suffix run_{memory_mode}_{transport_mode} 
 
+```
+# create and compose up with memory_mode=inmemory and transport_mode=http 
+ make run_inmemory_http
+``` 
 
-3. Docker build
 ```
- pg_pass=qwerty docker compose up {--build| if it's first start} {-d| disable logs}
-```
-
-4. Set logs
-   
-```
- docker logs -f url_shortener
+# create and compose up with memory_mode=postgres and transport_mode=gRPC 
+ make run_postgres_gRPC
 ```
 
 <p align="right"><a href="#url_shortener">Back to top ⬆️</a></p>
@@ -119,7 +124,7 @@ Application have two endpoints:
 
 ## 🧩 Usage
 
-We can access the service using curl utility:
+We can access the service with transport_mode=http using curl utility:
  - ```
     curl -X POST "http://localhost:8080/api/shorten-url/" -H "Content-Type: text/plain; charset=utf-8" -d "http://localhost:8080/api/" 
     ```
@@ -127,11 +132,33 @@ We can access the service using curl utility:
     curl -X GET "http://localhost:8080/api/get-url/?url=____aRirKl" 
     ```
 
+If you want access the service with transport_mode=gRPC,  use evans utility: 
+
+- ```
+  # connect to gRCP server on 8080 port
+  evans proto/url_shortener.proto -p 8080 
+  ``` 
+
+- ```
+  # call endpoint gRCP server 
+  url_shortener.GrpcHandler@127.0.0.1:8080> call GetUrl
+  ``` 
+
+- ```
+  # pass parameters for method 
+  rawShortUrl (TYPE_STRING) => ____aowuMS
+  ``` 
+
+- ```
+  # get a response 
+  command call: rpc error: code = Unknown desc = url with ____aowuMS shortUrl doesn't exist | transportMode=gRPC
+  ``` 
+
 <p align="right"><a href="#url_shortener">Back to top ⬆️</a></p>
 
 ## 📌 To do 
 
-- gRPC ✅
+- gRPC + evans ✅
 - Makefile ✅
 - Unit and E2E test 
 - Сleaning of unused Url
