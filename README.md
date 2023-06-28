@@ -53,7 +53,8 @@ url_shortener
 │   │   └── config.go
 │   ├── service
 │   │   ├── encoder
-│   │   │   └── encoder.go
+│   │   │   ├── encoder.go
+│   │   │   └── encoder_test.go
 │   │   └── service.go
 │   ├── storage
 │   │   ├── inmemory
@@ -61,6 +62,11 @@ url_shortener
 │   │   └── postgres
 │   │       └── postgres.go
 │   └── transport
+│       ├── gRPC
+│       │   ├── gRPCHandler
+│       │   │   └── gRPCHandler.go
+│       │   └── gRPCServer
+│       │       └── gRPCServer.go
 │       └── http
 │           ├── httpHandler
 │           │   └── htppHandler.go
@@ -72,6 +78,10 @@ url_shortener
 │   │   └── logger.go
 │   └── validator
 │       └── validator.go
+├── proto
+│   ├── url_shortener_grpc.pb.go
+│   ├── url_shortener.pb.go
+│   └── url_shortener.proto
 ├── README.md
 └── TASK.md
 ```
