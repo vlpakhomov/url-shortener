@@ -7,6 +7,7 @@
 All my projects is bricks 🧱 of road to becoming a developer ✨.
 
 This project is dedicated to implementation url-shortener service. It's task for internship selection of ozon. We can see task-requirements is contains in TASK.md.
+Probably, I will add other useful and more complex features to this implementation in the future ⌛. 
 
 <p align="right"><a href="#url_shortener">Back to top ⬆️</a></p>
 
@@ -17,10 +18,11 @@ This project is dedicated to implementation url-shortener service. It's task for
 - Auto application configuration using config parser
 - Multi-level logging using zap logger
 - Flexibility deploy with docker  
-- Work with PostgreSQL usin pgx and squirrel libraries
+- Work with PostgreSQL using pgx and squirrel libraries
 - Unit-testing for business logic layer with testify;
 - Testing gRPC server with evans tool 
 - Simple run with makefile
+- Reproducibility thanks to config.yaml + configParser
 
 <p align="right"><a href="#url_shortener">Back to top ⬆️</a></p>
 
@@ -30,6 +32,7 @@ This project is dedicated to implementation url-shortener service. It's task for
 - [Solutions and Techniques](#-solutions-and-techniques)
 - [Table of Contents](#️-table-of-contents)
 - [Working Tree](#-working-tree)
+- [Сonfiguration file](#-сonfiguration-file)
 - [Getting Started](#️--getting-started)
 - [API](#-api)
 - [Usage](#-usage)
@@ -88,6 +91,31 @@ url_shortener
 
 <p align="right"><a href="#url_shortener">Back to top ⬆️</a></p>
 
+## ⚙️ Сonfiguration file
+
+```
+env:
+  - name: "SERVER_PORT"
+    value: ":8080"
+
+  - name: "DB_NAME"
+    value: "postgres"
+  - name: "DB_HOST"
+    value: "host.docker.internal"
+  - name: "DB_PORT"
+    value: "5432"
+  - name: "DB_USER"
+    value: "postgres"
+
+  - name: "LOG_LEVEL"
+    value: "debug"
+
+  - name: "SHORT_URL_PATTERN"
+    value: "^[a-zA-Z0-9_]{10}$"
+```
+
+
+<p align="right"><a href="#url_shortener">Back to top ⬆️</a></p>
 
 ## 🛠️  Getting Started
 
